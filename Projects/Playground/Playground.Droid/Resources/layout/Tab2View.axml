@@ -5,9 +5,38 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
+    <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          local:MvxBind="Text Message" />
+    <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="10dp"
+          android:background="#000000" />
 	<Button android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="10dp"
 		android:text="Close tab"
 		local:MvxBind="Click CloseViewModelCommand;" />
+	<Button android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="Update Count"
+		local:MvxBind="Click UpdateCountCommand;" />
+	<Button android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="Get Text"
+		local:MvxBind="Click GetTextCommand;" />
+	<Button android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="Get Reverse Text"
+		local:MvxBind="Click GetRevTextCommand;" />
+	<Button android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="Get Text Length"
+		local:MvxBind="Click GetTextLengthCommand;" />
 </LinearLayout>

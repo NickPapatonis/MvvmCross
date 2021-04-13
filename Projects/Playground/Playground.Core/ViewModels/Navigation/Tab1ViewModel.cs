@@ -37,11 +37,6 @@ namespace Playground.Core.ViewModels
             para = parameter;
         }
 
-        public override void ViewAppeared()
-        {
-            base.ViewAppeared();
-        }
-
         public IMvxAsyncCommand OpenChildCommand { get; private set; }
 
         public IMvxAsyncCommand OpenModalCommand { get; private set; }
@@ -51,5 +46,48 @@ namespace Playground.Core.ViewModels
         public IMvxAsyncCommand OpenTab2Command { get; private set; }
 
         public IMvxAsyncCommand CloseCommand { get; private set; }
+
+        public override void ViewAppearing()
+        {
+            Log.Trace($"{nameof(Tab1ViewModel)}.Begin");
+            base.ViewAppearing();
+            Log.Trace($"{nameof(Tab1ViewModel)}.End");
+        }
+
+        public override void ViewAppeared()
+        {
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewAppeared)} Begin");
+            base.ViewAppeared();
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewAppeared)} End");
+        }
+
+        public override void ViewDisappearing()
+        {
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDisappearing)} Begin");
+            base.ViewDisappearing();
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDisappearing)} End");
+        }
+
+        public override void ViewDisappeared()
+        {
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDisappeared)} Begin");
+            base.ViewDisappeared();
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDisappeared)} End");
+        }
+
+        public override void ViewCreated()
+        {
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewCreated)} Begin");
+            base.ViewCreated();
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewCreated)} End");
+        }
+
+        public override void ViewDestroy(bool viewFinishing = true)
+        {
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDestroy)} Begin, {nameof(viewFinishing)} = {viewFinishing}");
+            base.ViewDestroy(viewFinishing);
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDestroy)} End");
+        }
+
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Android.OS;
 using Android.Support.Design.Widget;
@@ -143,6 +144,8 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
 
         public override Task<bool> ChangePresentation(MvxPresentationHint hint)
         {
+            Trace("Begin");
+
             if (hint is MvxPagePresentationHint pagePresentationHint)
             {
                 var request = new MvxViewModelRequest(pagePresentationHint.ViewModel);
@@ -169,7 +172,31 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
                 }
             }
 
-            return base.ChangePresentation(hint);
+            try
+            {
+                Trace("Before base.ChangePresentation");
+                return base.ChangePresentation(hint);
+            }
+            catch (Exception ex)
+            {
+                ErrorException("Error calling base.ChangePresentation", ex);
+                throw;
+            }
+
+            //try
+            //{
+            //    Trace("Before base.ChangePresentation");
+            //    var x = base.ChangePresentation(hint);
+            //    Trace("After base.ChangePresentation");
+
+            //    Trace("End");
+            //    return x;
+            //}
+            //catch (Exception ex)
+            //{
+            //    TraceException("Error invoking CloseAction", ex);
+            //    throw;
+            //}
         }
 
         protected virtual ViewPager FindViewPagerInFragmentPresentation(MvxViewPagerFragmentPresentationAttribute pagerFragmentAttribute)
@@ -623,8 +650,28 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
                 return Task.FromResult(true);
             }
 
-            CurrentActivity.Finish();
+            try
+            {
+                var isNull = CurrentActivity == null;
+                Trace($"CurrentActivity is null = {isNull}");
+                CurrentActivity.Finish();
+            }
+            catch (Exception ex)
+            {
+                ErrorException("Error Finishing CurrentActivity", ex);
+                throw;
+            }
             return Task.FromResult(true);
+        }
+
+        protected static readonly IMvxLog Log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor<MvxAppCompatViewPresenter>();
+        private static void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            Log.Trace($"{caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxAndroidMainThreadDispatcher.Instance.IsOnMainThread}] {msg}");
+        }
+        private static void ErrorException(string msg, Exception exception, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            Log.ErrorException($"{caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxAndroidMainThreadDispatcher.Instance.IsOnMainThread}] {msg}", exception);
         }
 
         protected virtual bool TryPerformCloseFragmentTransaction(

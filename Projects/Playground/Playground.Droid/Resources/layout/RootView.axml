@@ -18,6 +18,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:text="Show Test Tabs"
+                local:MvxBind="Click ShowTestTabsCommand" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Show Tabs"
+                local:MvxBind="Click ShowTabsCommand" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Show Test 01"
+                local:MvxBind="Click ShowTest01Command" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Show Test 02"
+                local:MvxBind="Click ShowTest02Command" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Show Custom Binding"
+                local:MvxBind="Click ShowCustomBindingCommand" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="Show Child"
                 local:MvxBind="Click ShowChildCommand;" />
             <Button
@@ -32,12 +62,6 @@
                 android:layout_marginTop="10dp"
                 android:text="Show Modal Navigation"
                 local:MvxBind="Click ShowModalNavCommand;" />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Show Tabs"
-                local:MvxBind="Click ShowTabsCommand;" />
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,12 +98,6 @@
                 android:layout_marginTop="10dp"
                 android:text="Show Shared Element transition"
                 local:MvxBind="Click ShowSharedElementsCommand;" />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Show Custom Binding"
-                local:MvxBind="Click ShowCustomBindingCommand" />
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

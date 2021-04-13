@@ -3,12 +3,15 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.App;
 using MvvmCross.Base;
+using MvvmCross.Logging;
+using MvvmCross.Platforms.Android.Views;
 using MvvmCross.Platforms.Android.Views.Base;
 using MvvmCross.ViewModels;
 
@@ -28,51 +31,72 @@ namespace MvvmCross.Droid.Support.V7.AppCompat.EventSource
 
         protected override void OnCreate(Bundle bundle)
         {
+            Trace("Begin");
             CreateWillBeCalled.Raise(this, bundle);
             base.OnCreate(bundle);
             CreateCalled.Raise(this, bundle);
+            Trace("End");
         }
 
         protected override void OnDestroy()
         {
+            Trace("Begin");
             DestroyCalled.Raise(this);
             base.OnDestroy();
+            Trace("End");
         }
 
         protected override void OnNewIntent(Intent intent)
         {
+            Trace("Begin");
             base.OnNewIntent(intent);
             NewIntentCalled.Raise(this, intent);
+            Trace("End");
         }
 
         protected override void OnResume()
         {
+            Trace("Begin");
             base.OnResume();
             ResumeCalled.Raise(this);
+            Trace("End");
         }
 
         protected override void OnPause()
         {
+            Trace("Begin");
             PauseCalled.Raise(this);
             base.OnPause();
+            Trace("End");
         }
 
         protected override void OnStart()
         {
+            Trace("Begin");
             base.OnStart();
             StartCalled.Raise(this);
+            Trace("End");
         }
 
         protected override void OnRestart()
         {
+            Trace("Begin");
             base.OnRestart();
             RestartCalled.Raise(this);
+            Trace("End");
         }
 
         protected override void OnStop()
         {
+            Trace("Begin");
             StopCalled.Raise(this);
             base.OnStop();
+            Trace("End");
+        }
+
+        private void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            MvxAndroidLog.Instance.Trace($"({nameof(MvxEventSourceAppCompatActivity)}) {caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxAndroidMainThreadDispatcher.Instance.IsOnMainThread}] {msg}");
         }
 
         protected override void OnSaveInstanceState(Bundle outState)

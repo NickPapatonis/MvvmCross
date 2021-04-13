@@ -52,6 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\CustomBindingView.cs" />
+    <Compile Include="Activities\IDialogService.cs" />
+    <Compile Include="Activities\TabsHostActivityView.cs" />
+    <Compile Include="Activities\Test01View.cs" />
+    <Compile Include="Activities\Test02View.cs" />
     <Compile Include="Adapter\SelectedItemRecyclerAdapter.cs" />
     <Compile Include="Adapter\SelectedItemRecyclerAdapter.SelectedItemEventArgs.cs" />
     <Compile Include="Bindings\BinaryEditTargetBinding.cs" />
@@ -59,8 +63,17 @@
     <Compile Include="Fragments\BaseSplitDetailView.cs" />
     <Compile Include="Fragments\FluentBindingView.cs" />
     <Compile Include="Fragments\FragmentCloseView.cs" />
+    <Compile Include="Fragments\Modal01View.cs" />
+    <Compile Include="Fragments\Modal02View.cs" />
+    <Compile Include="Fragments\Tab01View.cs" />
+    <Compile Include="Fragments\Tab02View.cs" />
+    <Compile Include="Fragments\TabsHostFragmentView.cs" />
     <Compile Include="Fragments\TabsRootBView.cs" />
+    <Compile Include="G1T\DialogFragment.cs" />
+    <Compile Include="G1T\DialogService.cs" />
+    <Compile Include="G1T\ErrorDialogFragment.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
+    <Compile Include="Presenters\TksAppCompatViewPresenter.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SplashScreen.cs" />
@@ -152,7 +165,11 @@
     <AndroidResource Include="Resources\layout\SheetView.axml" />
     <AndroidResource Include="Resources\layout\TabsRootBView.axml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Test01View.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\MvvmCross.Android.Support\Design\MvvmCross.Droid.Support.Design.csproj">
       <Project>{45f63a4a-9a37-4929-9c80-48a91f346e0d}</Project>
@@ -259,6 +276,31 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\star.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Test02View.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\ModalNNView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\FragmentErrorDialog.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\TabsHostActivityView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\TabsHostFragmentView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\..\XamarinBuild.targets" />

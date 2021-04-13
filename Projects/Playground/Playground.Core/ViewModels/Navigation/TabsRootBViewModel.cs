@@ -42,5 +42,47 @@ namespace Playground.Core.ViewModels
                 RaisePropertyChanged(() => ItemIndex);
             }
         }
+
+        public override void ViewAppearing()
+        {
+            Log.Trace($"{nameof(TabsRootBViewModel)}.Begin");
+            base.ViewAppearing();
+            Log.Trace($"{nameof(TabsRootBViewModel)}.End");
+        }
+
+        public override void ViewAppeared()
+        {
+            Log.Trace($"{nameof(TabsRootBViewModel)}.{nameof(ViewAppeared)} Begin");
+            base.ViewAppeared();
+            Log.Trace($"{nameof(TabsRootBViewModel)}.{nameof(ViewAppeared)} End");
+        }
+
+        public override void ViewDisappearing()
+        {
+            Log.Trace($"{nameof(TabsRootBViewModel)}.{nameof(ViewDisappearing)} Begin");
+            base.ViewDisappearing();
+            Log.Trace($"{nameof(TabsRootBViewModel)}.{nameof(ViewDisappearing)} End");
+        }
+
+        public override void ViewDisappeared()
+        {
+            Log.Trace($"{nameof(TabsRootBViewModel)}.{nameof(ViewDisappeared)} Begin");
+            base.ViewDisappeared();
+            Log.Trace($"{nameof(TabsRootBViewModel)}.{nameof(ViewDisappeared)} End");
+        }
+
+        public override void ViewCreated()
+        {
+            Log.Trace($"{nameof(TabsRootBViewModel)}.{nameof(ViewCreated)} Begin");
+            base.ViewCreated();
+            Log.Trace($"{nameof(TabsRootBViewModel)}.{nameof(ViewCreated)} End");
+        }
+
+        public override void ViewDestroy(bool viewFinishing = true)
+        {
+            Log.Trace($"{nameof(TabsRootBViewModel)}.{nameof(ViewDestroy)} Begin, {nameof(viewFinishing)} = {viewFinishing}");
+            base.ViewDestroy(viewFinishing);
+            Log.Trace($"{nameof(TabsRootBViewModel)}.{nameof(ViewDestroy)} End");
+        }
     }
 }

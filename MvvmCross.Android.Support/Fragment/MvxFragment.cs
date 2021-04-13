@@ -3,10 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading;
 using Android.OS;
 using Android.Runtime;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Droid.Support.V4.EventSource;
+using MvvmCross.Logging;
 using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
 
@@ -53,7 +55,7 @@ namespace MvvmCross.Droid.Support.V4
             set
             {
                 _dataContext = value;
-                if(BindingContext != null)
+                if (BindingContext != null)
                     BindingContext.DataContext = value;
             }
         }
@@ -79,38 +81,55 @@ namespace MvvmCross.Droid.Support.V4
 
         public override void OnCreate(Bundle savedInstanceState)
         {
+            Trace("Begin");
             base.OnCreate(savedInstanceState);
             ViewModel?.ViewCreated();
+            Trace("End");
         }
 
         public override void OnDestroy()
         {
+            Trace("Begin");
             base.OnDestroy();
             ViewModel?.ViewDestroy(viewFinishing: IsRemoving || Activity == null || Activity.IsFinishing);
+            Trace("End");
         }
 
         public override void OnStart()
         {
+            Trace("Begin");
             base.OnStart();
             ViewModel?.ViewAppearing();
+            Trace("End");
         }
 
         public override void OnResume()
         {
+            Trace("Begin");
             base.OnResume();
             ViewModel?.ViewAppeared();
+            Trace("End");
         }
 
         public override void OnPause()
         {
+            Trace("Begin");
             base.OnPause();
             ViewModel?.ViewDisappearing();
+            Trace("End");
         }
 
         public override void OnStop()
         {
+            Trace("Begin");
             base.OnStop();
             ViewModel?.ViewDisappeared();
+            Trace("End");
+        }
+
+        private void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            MvxAndroidLog.Instance.Trace($"({nameof(MvxFragment)}) {caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxAndroidMainThreadDispatcher.Instance.IsOnMainThread}] {msg}");
         }
     }
 

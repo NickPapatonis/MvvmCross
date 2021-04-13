@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/err_dialog_main">
+
+            <TextView
+                android:id="@+id/shortError"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/error_dialog_verticalMargin"
+                android:layout_marginBottom="@dimen/error_dialog_verticalMargin"
+                android:layout_marginLeft="@dimen/error_dialog_horizontalMargin"
+                android:layout_marginRight="@dimen/error_dialog_horizontalMargin"                
+                android:textSize="@dimen/error_dialog_font_size"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/longError"
+                android:scrollbars="vertical"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/error_dialog_verticalMargin"
+                android:layout_marginBottom="@dimen/error_dialog_verticalMargin"
+                android:layout_marginLeft="@dimen/error_dialog_horizontalMargin"
+                android:layout_marginRight="@dimen/error_dialog_horizontalMargin"                
+                android:textSize="@dimen/error_dialog_font_size"
+                android:textColor="@color/gray"/>
+        </LinearLayout>
+    </ScrollView>
+      
+</LinearLayout>

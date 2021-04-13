@@ -19,6 +19,7 @@ using Playground.Core.Services;
 using Playground.Core.ViewModels.Bindings;
 using Playground.Core.ViewModels.Navigation;
 using Playground.Core.ViewModels.Samples;
+using Playground.Core.ViewModels.Tests;
 
 namespace Playground.Core.ViewModels
 {
@@ -58,11 +59,14 @@ namespace Playground.Core.ViewModels
                 var testIfReturn = result;
             });
 
+            ShowTest01Command = new MvxAsyncCommand(async () => await NavigationService.Navigate<Test01ViewModel>());
+            ShowTest02Command = new MvxAsyncCommand(async () => await NavigationService.Navigate<Test02ViewModel>());
+
             ShowModalCommand = new MvxAsyncCommand(Navigate);
 
-            ShowModalNavCommand =
-                new MvxAsyncCommand(async () => await NavigationService.Navigate<ModalNavViewModel>());
+            ShowModalNavCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<ModalNavViewModel>());
 
+            ShowTestTabsCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<TabsHostFragmentViewModel>());
             ShowTabsCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<TabsRootViewModel>());
 
             ShowPagesCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<PagesRootViewModel>());
@@ -109,6 +113,9 @@ namespace Playground.Core.ViewModels
 
         public MvxNotifyTask MyTask { get; set; }
 
+        public IMvxAsyncCommand ShowTest01Command { get; }
+        public IMvxAsyncCommand ShowTest02Command { get; }
+
         public IMvxAsyncCommand ShowChildCommand { get; }
 
         public IMvxAsyncCommand ShowModalCommand { get; }
@@ -116,6 +123,8 @@ namespace Playground.Core.ViewModels
         public IMvxAsyncCommand ShowModalNavCommand { get; }
 
         public IMvxAsyncCommand ShowCustomBindingCommand { get; }
+
+        public IMvxAsyncCommand ShowTestTabsCommand { get; }
 
         public IMvxAsyncCommand ShowTabsCommand { get; }
 

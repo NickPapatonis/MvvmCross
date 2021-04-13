@@ -5,7 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using MvvmCross.Logging;
 using MvvmCross.Presenters.Attributes;
 using MvvmCross.Presenters.Hints;
@@ -154,20 +156,72 @@ namespace MvvmCross.Presenters
 
         public override async Task<bool> ChangePresentation(MvxPresentationHint hint)
         {
+            Trace("Begin");
+
             if (await HandlePresentationChange(hint)) return true;
 
             if (hint is MvxClosePresentationHint presentationHint)
             {
-                return await Close(presentationHint.ViewModelToClose);
+                try
+                {
+                    Trace("Before Close");
+                    return await Close(presentationHint.ViewModelToClose);
+                }
+                catch (Exception ex)
+                {
+                    ErrorException("Error closing", ex);
+                    throw;
+                }
+
+                //try
+                //{
+                //    Trace("Before Close");
+                //    var x = await Close(presentationHint.ViewModelToClose);
+                //    Trace("After Close");
+
+                //    Trace("End");
+                //    return x;
+                //}
+                //catch (Exception ex)
+                //{
+                //    ErrorException("Error closing", ex);
+                //    throw;
+                //}
             }
 
             MvxLog.Instance.Warn("Hint ignored {0}", hint.GetType().Name);
+
             return false;
         }
 
         public override Task<bool> Close(IMvxViewModel viewModel)
         {
-            return GetPresentationAttributeAction(new MvxViewModelInstanceRequest(viewModel), out MvxBasePresentationAttribute attribute).CloseAction.Invoke(viewModel, attribute);
+            Trace("Begin");
+
+            try
+            {
+                Trace("Before GetPresentationAttributeAction");
+                var x = GetPresentationAttributeAction(new MvxViewModelInstanceRequest(viewModel), out MvxBasePresentationAttribute attribute).CloseAction.Invoke(viewModel, attribute);
+                Trace("After GetPresentationAttributeAction");
+
+                Trace("End");
+                return x;
+            }
+            catch (Exception ex)
+            {
+                ErrorException("Error invoking CloseAction", ex);
+                throw;
+            }
+        }
+
+        protected static readonly IMvxLog Log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor<MvxAttributeViewPresenter>();
+        private static void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            Log.Trace($"{caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxMainThreadDispatcher.Instance.IsOnMainThread}] {msg}");
+        }
+        private static void ErrorException(string msg, Exception exception, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            Log.ErrorException($"{caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxMainThreadDispatcher.Instance.IsOnMainThread}] {msg}", exception);
         }
 
         public override Task<bool> Show(MvxViewModelRequest request)

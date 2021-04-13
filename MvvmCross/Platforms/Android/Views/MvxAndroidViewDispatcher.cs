@@ -2,7 +2,10 @@
 // The .NET Foundation licenses this file to you under the MS-PL license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross.Logging;
 using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
@@ -26,10 +29,42 @@ namespace MvvmCross.Platforms.Android.Views
             return true;
         }
 
+        //public async Task<bool> ChangePresentation(MvxPresentationHint hint)
+        //{
+        //    await ExecuteOnMainThreadAsync(() => _presenter.ChangePresentation(hint));
+        //    return true;
+        //}
+
         public async Task<bool> ChangePresentation(MvxPresentationHint hint)
         {
-            await ExecuteOnMainThreadAsync(() => _presenter.ChangePresentation(hint));
+            Trace("Begin");
+            await ExecuteOnMainThreadAsync(() =>
+            {
+                Trace("Begin", $"{nameof(ChangePresentation)}.action");
+
+                try
+                {
+                    Trace("Before invoking presenter's ChangePresentation", $"{nameof(ChangePresentation)}.action");
+                    return _presenter.ChangePresentation(hint);
+                }
+                catch (Exception ex)
+                {
+                    ErrorException("Error changing presentation", ex);
+                    throw;
+                }
+            });
+            Trace("End");
             return true;
+        }
+
+        new protected static readonly IMvxLog Log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor<MvxAndroidViewDispatcher>();
+        private static void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            Log.Trace($"{caller} [{Thread.CurrentThread.ManagedThreadId}, {Instance.IsOnMainThread}] {msg}");
+        }
+        private static void ErrorException(string msg, Exception exception, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            Log.ErrorException($"{caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxAndroidMainThreadDispatcher.Instance.IsOnMainThread}] {msg}", exception);
         }
     }
 }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
@@ -11,6 +12,7 @@ using Android.Views;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Core;
 using MvvmCross.Droid.Support.V7.AppCompat.EventSource;
+using MvvmCross.Logging;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Binding.Views;
 using MvvmCross.Platforms.Android.Views;
@@ -85,44 +87,70 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
 
         protected override void OnCreate(Bundle bundle)
         {
+            Trace("Begin");
             base.OnCreate(bundle);
             ViewModel?.ViewCreated();
+            Trace("End");
         }
-        
+
         protected override void OnDestroy()
         {
+            Trace("Begin");
             base.OnDestroy();
             ViewModel?.ViewDestroy(IsFinishing);
+            Trace("End");
         }
 
         protected override void OnStart()
         {
+            Trace("Begin");
             base.OnStart();
             ViewModel?.ViewAppearing();
+            Trace("End");
         }
 
         protected override void OnResume()
         {
+            Trace("Begin");
             base.OnResume();
             ViewModel?.ViewAppeared();
+            Trace("End");
         }
 
         protected override void OnPause()
         {
+            Trace("Begin");
             base.OnPause();
             ViewModel?.ViewDisappearing();
+            Trace("End");
         }
 
         protected override void OnStop()
         {
+            Trace("Begin");
             base.OnStop();
             ViewModel?.ViewDisappeared();
+            Trace("End");
         }
 
         public override View OnCreateView(View parent, string name, Context context, IAttributeSet attrs)
         {
-            var view = MvxAppCompatActivityHelper.OnCreateView(parent, name, context, attrs);
-            return view ?? base.OnCreateView(parent, name, context, attrs);
+            Trace("Begin");
+
+            try
+            {
+                var view = MvxAppCompatActivityHelper.OnCreateView(parent, name, context, attrs);
+                return view ?? base.OnCreateView(parent, name, context, attrs);
+            }
+            finally
+            {
+                Trace("End");
+            }
+        }
+
+        private void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            MvxAndroidLog.Instance.Trace($"({nameof(MvxAppCompatActivity)}) {caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxAndroidMainThreadDispatcher.Instance.IsOnMainThread}] {msg}");
         }
     }
 

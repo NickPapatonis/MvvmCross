@@ -4,6 +4,14 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+    <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          local:MvxBind="Text Message" />
+    <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="#000000" />
     <BinaryEdit
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -14,4 +22,14 @@
         android:layout_height="wrap_content"
         android:textSize="40dp"
         local:MvxBind="Text Counter" />
+	<Button android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="Do Async Work"
+		local:MvxBind="Click WorkCommand" />
+	<Button android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="Close"
+		local:MvxBind="Click CloseCommand" />
 </LinearLayout>
