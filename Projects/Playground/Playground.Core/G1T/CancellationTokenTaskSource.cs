@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Playground.Core.G1T
 {
+    // TODO: REMOVE, NOT NEEDED WITH SIMPLIFIED EXTENSION METHOD WaitAsync
     public sealed class CancellationTokenTaskSource<T> : IDisposable
     {
         /// <summary>
