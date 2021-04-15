@@ -4,9 +4,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Logging;
 using MvvmCross.Navigation;
@@ -28,20 +26,11 @@ namespace Playground.Core.ViewModels
 
         private async Task ShowInitialViewModels()
         {
-            Trace("Begin");
-
             var tasks = new List<Task>();
-            Trace($"Navigating to {nameof(Tab1ViewModel)}");
             tasks.Add(NavigationService.Navigate<Tab1ViewModel, string>("test"));
-            Trace($"Navigating to {nameof(Tab2ViewModel)}");
             tasks.Add(NavigationService.Navigate<Tab2ViewModel>());
-            Trace($"Navigating to {nameof(Tab3ViewModel)}");
             tasks.Add(NavigationService.Navigate<Tab3ViewModel>());
-            Trace("Start awaiting all navigate tasks");
             await Task.WhenAll(tasks);
-            Trace("Finish awaiting navigate tasks");
-
-            Trace("End");
         }
 
         private int _itemIndex;
@@ -53,56 +42,51 @@ namespace Playground.Core.ViewModels
             {
                 if (_itemIndex == value) return;
                 _itemIndex = value;
-                Trace($"Tab item changed to {_itemIndex}");
+                Log.Trace("Tab item changed to {0}", _itemIndex.ToString());
                 RaisePropertyChanged(() => ItemIndex);
             }
         }
 
         public override void ViewAppearing()
         {
-            Trace("Begin");
+            Log.Trace($"{nameof(TabsRootViewModel)}.Begin");
             base.ViewAppearing();
-            Trace("End");
+            Log.Trace($"{nameof(TabsRootViewModel)}.End");
         }
 
         public override void ViewAppeared()
         {
-            Trace("Begin");
+            Log.Trace($"{nameof(TabsRootViewModel)}.{nameof(ViewAppeared)} Begin");
             base.ViewAppeared();
-            Trace("End");
+            Log.Trace($"{nameof(TabsRootViewModel)}.{nameof(ViewAppeared)} End");
         }
 
         public override void ViewDisappearing()
         {
-            Trace("Begin");
+            Log.Trace($"{nameof(TabsRootViewModel)}.{nameof(ViewDisappearing)} Begin");
             base.ViewDisappearing();
-            Trace("End");
+            Log.Trace($"{nameof(TabsRootViewModel)}.{nameof(ViewDisappearing)} End");
         }
 
         public override void ViewDisappeared()
         {
-            Trace("Begin");
+            Log.Trace($"{nameof(TabsRootViewModel)}.{nameof(ViewDisappeared)} Begin");
             base.ViewDisappeared();
-            Trace("End");
+            Log.Trace($"{nameof(TabsRootViewModel)}.{nameof(ViewDisappeared)} End");
         }
 
         public override void ViewCreated()
         {
-            Trace("Begin");
+            Log.Trace($"{nameof(TabsRootViewModel)}.{nameof(ViewCreated)} Begin");
             base.ViewCreated();
-            Trace("End");
+            Log.Trace($"{nameof(TabsRootViewModel)}.{nameof(ViewCreated)} End");
         }
 
         public override void ViewDestroy(bool viewFinishing = true)
         {
-            Trace($"Begin, {nameof(viewFinishing)} = {viewFinishing}");
+            Log.Trace($"{nameof(TabsRootViewModel)}.{nameof(ViewDestroy)} Begin, {nameof(viewFinishing)} = {viewFinishing}");
             base.ViewDestroy(viewFinishing);
-            Trace("End");
-        }
-
-        private void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
-        {
-            Log.Trace($"{caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxMainThreadDispatcher.Instance.IsOnMainThread}] {msg}");
+            Log.Trace($"{nameof(TabsRootViewModel)}.{nameof(ViewDestroy)} End");
         }
     }
 }

@@ -424,14 +424,9 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
             MvxViewPagerFragmentPresentationAttribute attribute,
             MvxViewModelRequest request)
         {
-            Trace("Begin");
-
             // if the attribute doesn't supply any host, assume current activity!
             if (attribute.FragmentHostViewType == null && attribute.ActivityHostViewModelType == null)
-            {
-                Trace("Setting attribute.ActivityHostViewModelType from CurrentActivity");
                 attribute.ActivityHostViewModelType = GetCurrentActivityViewModelType();
-            }
 
             ViewPager viewPager = null;
             FragmentManager fragmentManager = null;
@@ -439,20 +434,13 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
             // check for a ViewPager inside a Fragment
             if (attribute.FragmentHostViewType != null)
             {
-                Trace("Getting fragment by view type");
                 var fragment = GetFragmentByViewType(attribute.FragmentHostViewType);
                 if (fragment == null)
-                {
-                    Trace("fragment == null");
                     throw new MvxException("Fragment not found", attribute.FragmentHostViewType.Name);
-                }
 
                 if (fragment.View == null)
-                {
-                    Trace("fragment.View == null");
                     throw new MvxException("Fragment.View is null. Please consider calling Navigate later in your code",
                         attribute.FragmentHostViewType.Name);
-                }
 
                 viewPager = fragment.View.FindViewById<ViewPager>(attribute.ViewPagerResourceId);
                 fragmentManager = fragment.ChildFragmentManager;
@@ -461,17 +449,12 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
             // check for a ViewPager inside an Activity
             if (attribute.ActivityHostViewModelType != null)
             {
-                Trace("Getting current activity view model type");
                 var currentActivityViewModelType = GetCurrentActivityViewModelType();
 
                 // if the host Activity is not the top-most Activity, then show it before proceeding, and return false for now
                 if (attribute.ActivityHostViewModelType != currentActivityViewModelType)
                 {
-                    Trace("attribute.ActivityHostViewModelType != CurrentActivity view model type");
-
-                    Trace("Saving view model request as pending");
                     _pendingRequest = request;
-                    Trace("Showing host activity from attribute");
                     ShowHostActivity(attribute);
                     return Task.FromResult(false);
                 }
@@ -482,16 +465,11 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
 
             // no more cases to check. Just throw if ViewPager wasn't found
             if (viewPager == null)
-            {
-                Trace("No viewpager found on either host fragment or activity");
                 throw new MvxException("ViewPager not found");
-            }
 
             var tag = attribute.Tag ?? attribute.ViewType.FragmentJavaName();
             if (viewPager.Adapter is MvxCachingFragmentStatePagerAdapter adapter)
             {
-                Trace("Viewpager has an adapter, add new FragmentInfo to it");
-
                 if (request is MvxViewModelInstanceRequest instanceRequest)
                     adapter.FragmentsInfo.Add(new MvxViewPagerFragmentInfo(
                         attribute.Title, tag, attribute.ViewType, instanceRequest.ViewModelInstance));
@@ -499,13 +477,10 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
                     adapter.FragmentsInfo.Add(new MvxViewPagerFragmentInfo(
                         attribute.Title, tag, attribute.ViewType, attribute.ViewModelType));
 
-                Trace("Calling adapter.NotifyDataSetChanged");
                 adapter.NotifyDataSetChanged();
             }
             else
             {
-                Trace("Viewpager does not have a MvxCachingFragmentStatePagerAdapter");
-
                 var fragments = new List<MvxViewPagerFragmentInfo>();
                 if (request is MvxViewModelInstanceRequest instanceRequest)
                     fragments.Add(new MvxViewPagerFragmentInfo(
@@ -514,11 +489,9 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
                     fragments.Add(new MvxViewPagerFragmentInfo(
                         attribute.Title, tag, attribute.ViewType, attribute.ViewModelType));
 
-                Trace("Construct new MvxCachingFragmentStatePagerAdapter with first FragmentInfo");
                 viewPager.Adapter = new MvxCachingFragmentStatePagerAdapter(CurrentActivity, fragmentManager, fragments);
             }
 
-            Trace("End");
             return Task.FromResult(true);
         }
 
@@ -527,14 +500,9 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
             MvxTabLayoutPresentationAttribute attribute,
             MvxViewModelRequest request)
         {
-            Trace("Begin");
-
             var showViewPagerFragment = await ShowViewPagerFragment(view, attribute, request);
             if (!showViewPagerFragment)
-            {
-                Trace("ShowViewPagerFragment returned false");
                 return false;
-            }
 
             ViewPager viewPager = null;
             TabLayout tabLayout = null;
@@ -542,8 +510,6 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
             // check for a ViewPager inside a Fragment
             if (attribute.FragmentHostViewType != null)
             {
-                Trace("Finding fragment, viewpager and tablayout from attribute.FragmentHostViewType");
-
                 var fragment = GetFragmentByViewType(attribute.FragmentHostViewType);
 
                 viewPager = fragment.View.FindViewById<ViewPager>(attribute.ViewPagerResourceId);
@@ -553,22 +519,14 @@ namespace MvvmCross.Droid.Support.V7.AppCompat
             // check for a ViewPager inside an Activity
             if (attribute.ActivityHostViewModelType != null)
             {
-                Trace("Finding fragment, viewpager and tablayout from CurrentActivity");
-
                 viewPager = CurrentActivity.FindViewById<ViewPager>(attribute.ViewPagerResourceId);
                 tabLayout = CurrentActivity.FindViewById<TabLayout>(attribute.TabLayoutResourceId);
             }
 
             if (viewPager == null || tabLayout == null)
-            {
-                Trace("Couldn't find viewpager or tablayout");
                 throw new MvxException("ViewPager or TabLayout not found");
-            }
 
-            Trace("Calling tabLayout.SetupWithViewPager");
             tabLayout.SetupWithViewPager(viewPager);
-
-            Trace("End");
             return true;
 
         }

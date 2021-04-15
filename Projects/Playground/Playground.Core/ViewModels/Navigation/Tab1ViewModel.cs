@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MS-PL license.
 // See the LICENSE file in the project root for more information.
 
-using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Logging;
 using MvvmCross.Navigation;
@@ -17,8 +15,6 @@ namespace Playground.Core.ViewModels
     {
         public Tab1ViewModel(IMvxLogProvider logProvider, IMvxNavigationService navigationService) : base(logProvider, navigationService)
         {
-            Trace("Begin");
-
             OpenChildCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<ChildViewModel>());
 
             OpenModalCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<ModalViewModel>());
@@ -28,23 +24,17 @@ namespace Playground.Core.ViewModels
             CloseCommand = new MvxAsyncCommand(async () => await NavigationService.Close(this));
 
             OpenTab2Command = new MvxAsyncCommand(async () => await NavigationService.ChangePresentation(new MvxPagePresentationHint(typeof(Tab2ViewModel))));
-
-            Trace("End");
         }
 
         public override async Task Initialize()
         {
-            Trace("Begin");
             await Task.Delay(3000);
-            Trace("End");
         }
 
         string para;
         public override void Prepare(string parameter)
         {
-            Trace("Begin");
             para = parameter;
-            Trace("End");
         }
 
         public IMvxAsyncCommand OpenChildCommand { get; private set; }
@@ -59,49 +49,45 @@ namespace Playground.Core.ViewModels
 
         public override void ViewAppearing()
         {
-            Trace("Begin");
+            Log.Trace($"{nameof(Tab1ViewModel)}.Begin");
             base.ViewAppearing();
-            Trace("End");
+            Log.Trace($"{nameof(Tab1ViewModel)}.End");
         }
 
         public override void ViewAppeared()
         {
-            Trace("Begin");
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewAppeared)} Begin");
             base.ViewAppeared();
-            Trace("End");
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewAppeared)} End");
         }
 
         public override void ViewDisappearing()
         {
-            Trace("Begin");
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDisappearing)} Begin");
             base.ViewDisappearing();
-            Trace("End");
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDisappearing)} End");
         }
 
         public override void ViewDisappeared()
         {
-            Trace("Begin");
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDisappeared)} Begin");
             base.ViewDisappeared();
-            Trace("End");
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDisappeared)} End");
         }
 
         public override void ViewCreated()
         {
-            Trace("Begin");
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewCreated)} Begin");
             base.ViewCreated();
-            Trace("End");
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewCreated)} End");
         }
 
         public override void ViewDestroy(bool viewFinishing = true)
         {
-            Trace($"Begin, {nameof(viewFinishing)} = {viewFinishing}");
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDestroy)} Begin, {nameof(viewFinishing)} = {viewFinishing}");
             base.ViewDestroy(viewFinishing);
-            Trace("End");
+            Log.Trace($"{nameof(Tab1ViewModel)}.{nameof(ViewDestroy)} End");
         }
 
-        private void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
-        {
-            Trace($"{caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxMainThreadDispatcher.Instance.IsOnMainThread}] {msg}");
-        }
     }
 }
