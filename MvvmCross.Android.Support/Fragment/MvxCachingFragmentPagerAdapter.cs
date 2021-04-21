@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MS-PL license.
 // See the LICENSE file in the project root for more information.
 
@@ -33,24 +33,32 @@ namespace MvvmCross.Droid.Support.V4
         protected MvxCachingFragmentPagerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
+            Trace("Begin");
+
 #if DEBUG
             FragmentManager.EnableDebugLogging(true);
 #endif
+            Trace("End");
         }
 
         protected MvxCachingFragmentPagerAdapter(FragmentManager fragmentManager)
         {
+            Trace("Begin");
+
             _fragmentManager = fragmentManager;
 
 #if DEBUG
             FragmentManager.EnableDebugLogging(true);
 #endif
+            Trace("End");
         }
 
         public abstract Fragment GetItem(int position, Fragment.SavedState fragmentSavedState = null);
 
         public override void DestroyItem(ViewGroup container, int position, Object objectValue)
         {
+            Trace("Begin");
+
             var fragment = (Fragment)objectValue;
 
             if (_curTransaction == null)
@@ -72,6 +80,8 @@ namespace MvvmCross.Droid.Support.V4
             _fragments[position] = null;
 
             _curTransaction.Remove(fragment);
+
+            Trace("End");
         }
 
         public override void FinishUpdate(ViewGroup container)
@@ -85,6 +95,8 @@ namespace MvvmCross.Droid.Support.V4
 
         public override Object InstantiateItem(ViewGroup container, int position)
         {
+            Trace("Begin");
+
             // If we already have this item instantiated, there is nothing
             // to do.  This can happen when we are restoring the entire pager
             // from its saved state, where the fragment manager has already
@@ -93,25 +105,33 @@ namespace MvvmCross.Droid.Support.V4
             {
                 var existingFragment = _fragments.ElementAtOrDefault(position);
                 if (existingFragment != null)
+                {
+                    Trace("Returning existing fragment");
                     return existingFragment;
+                }
             }
 
             if (_curTransaction == null)
                 _curTransaction = _fragmentManager.BeginTransaction();
 
             var fragmentTag = GetTag(position);
+            Trace($"fragmentTag = {fragmentTag}");
 
             Fragment.SavedState fss = null;
             if (_savedState.Count > position)
             {
                 var savedTag = _savedFragmentTags.ElementAtOrDefault(position);
+                Trace($"savedTag = {savedTag}");
                 if (string.Equals(fragmentTag, savedTag))
                     fss = _savedState.ElementAtOrDefault(position);
             }
 
             var fragment = GetItem(position, fss);
             if (fss != null)
+            {
+                Trace("Setting fragment initial saved state");
                 fragment.SetInitialSavedState(fss);
+            }
 
             //if fragment tag is null let's set it to something meaning full;
             if (string.IsNullOrEmpty(fragmentTag))
@@ -126,11 +146,14 @@ namespace MvvmCross.Droid.Support.V4
             while (_fragments.Count <= position)
                 _fragments.Add(null);
 
+            Trace("Set fragment menu visibility and user visible hint to false");
             fragment.SetMenuVisibility(false);
             fragment.UserVisibleHint = false;
+            Trace("Save fragment in list and add to fragment mananger's transaction");
             _fragments[position] = fragment;
             _curTransaction.Add(container.Id, fragment, fragmentTag);
 
+            Trace("End");
             return fragment;
         }
 
@@ -220,21 +243,30 @@ namespace MvvmCross.Droid.Support.V4
 
         public override void SetPrimaryItem(ViewGroup container, int position, Object objectValue)
         {
+            Trace("Begin");
+
             var fragment = (Fragment)objectValue;
             if (fragment == _currentPrimaryItem)
+            {
+                Trace("Requested primary is alredy current");
                 return;
+            }
 
             if (_currentPrimaryItem != null)
             {
+                Trace("Set menu visibility and user visible hint to false on prev current");
                 _currentPrimaryItem.SetMenuVisibility(false);
                 _currentPrimaryItem.UserVisibleHint = false;
             }
             if (fragment != null)
             {
+                Trace("Set menu visibility and user visible hint to true on new current");
                 fragment.SetMenuVisibility(true);
                 fragment.UserVisibleHint = true;
             }
             _currentPrimaryItem = fragment;
+
+            Trace("End");
         }
 
         protected virtual string GetTag(int position)
@@ -249,6 +281,12 @@ namespace MvvmCross.Droid.Support.V4
                 throw new IllegalStateException("ViewPager with adapter " + this
                     + " requires a view id");
             }
+        }
+
+        protected static readonly IMvxLog Log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor<MvxCachingFragmentPagerAdapter>();
+        private static void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            Log.Trace($"{caller} [{System.Threading.Thread.CurrentThread.ManagedThreadId}, {MvxAndroidMainThreadDispatcher.Instance.IsOnMainThread}] {msg}");
         }
     }
 }

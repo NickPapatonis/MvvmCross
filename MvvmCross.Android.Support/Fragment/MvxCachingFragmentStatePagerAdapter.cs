@@ -11,6 +11,7 @@ using Android.Support.V4.App;
 using Android.Support.V4.View;
 using Java.Lang;
 using MvvmCross.Core;
+using MvvmCross.Logging;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.Platforms.Android.Views;
@@ -29,15 +30,22 @@ namespace MvvmCross.Droid.Support.V4
         protected MvxCachingFragmentStatePagerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
+            Trace("Begin");
             _activityType = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>().Activity.GetType();
+            Trace("End");
         }
 
 		public MvxCachingFragmentStatePagerAdapter(Context context, FragmentManager fragmentManager,
             List<MvxViewPagerFragmentInfo> fragmentsInfo) : base(fragmentManager)
         {
+            Trace("Begin");
+
             _context = context;
             FragmentsInfo = fragmentsInfo;
             _activityType = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>().Activity.GetType();
+            Trace($"FragmentInfo count = {FragmentsInfo.Count}, activityType = {_activityType?.Name ?? "null"}");
+
+            Trace("End");
         }
 
         public override int Count => FragmentsInfo?.Count() ?? 0;
@@ -46,20 +54,36 @@ namespace MvvmCross.Droid.Support.V4
 
         public override Fragment GetItem(int position, Fragment.SavedState fragmentSavedState = null)
         {
-            var fragInfo = FragmentsInfo.ElementAt(position);
-            var fragment = Fragment.Instantiate(_context, fragInfo.FragmentType.FragmentJavaName());
+            try
+            {
+                Trace("Begin");
 
-            var mvxFragment = fragment as IMvxFragmentView;
-            if (mvxFragment == null)
+                var fragInfo = FragmentsInfo.ElementAt(position);
+                var fragment = Fragment.Instantiate(_context, fragInfo.FragmentType.FragmentJavaName());
+
+                var mvxFragment = fragment as IMvxFragmentView;
+                if (mvxFragment == null)
+                {
+                    Trace("Not an MvxFragment");
+                    return fragment;
+                }
+
+                if (mvxFragment.GetType().IsFragmentCacheable(_activityType) && fragmentSavedState != null)
+                {
+                    Trace("Fragment is cacheable and has saved state");
+                    return fragment;
+                }
+
+                Trace($"Setting fragment view model from {(fragInfo.ViewModel != null ? "fragInfo" : "CreateViewModel")}");
+                var viewModel = fragInfo.ViewModel ?? CreateViewModel(position);
+                mvxFragment.ViewModel = viewModel;
+
                 return fragment;
-
-			if (mvxFragment.GetType().IsFragmentCacheable(_activityType) && fragmentSavedState != null)
-                return fragment;
-
-            var viewModel = fragInfo.ViewModel ?? CreateViewModel(position);
-            mvxFragment.ViewModel = viewModel;
-
-            return fragment;
+            }
+            finally
+            {
+                Trace("End");
+            }
         }
 
         public override int GetItemPosition(Java.Lang.Object @object)
@@ -79,15 +103,30 @@ namespace MvvmCross.Droid.Support.V4
 
         private IMvxViewModel CreateViewModel(int position)
         {
-            var fragInfo = FragmentsInfo.ElementAt(position);
+            try
+            {
+                Trace("Begin");
 
-            MvxBundle mvxBundle = null;
-            if (fragInfo.ParameterValuesObject != null)
-                mvxBundle = new MvxBundle(fragInfo.ParameterValuesObject.ToSimplePropertyDictionary());
+                var fragInfo = FragmentsInfo.ElementAt(position);
 
-            var request = new MvxViewModelRequest(fragInfo.ViewModelType, mvxBundle, null);
+                MvxBundle mvxBundle = null;
+                if (fragInfo.ParameterValuesObject != null)
+                    mvxBundle = new MvxBundle(fragInfo.ParameterValuesObject.ToSimplePropertyDictionary());
 
-            return Mvx.IoCProvider.Resolve<IMvxViewModelLoader>().LoadViewModel(request, null);
+                var request = new MvxViewModelRequest(fragInfo.ViewModelType, mvxBundle, null);
+
+                return Mvx.IoCProvider.Resolve<IMvxViewModelLoader>().LoadViewModel(request, null);
+            }
+            finally
+            {
+                Trace("End");
+            }
+        }
+
+        protected static readonly IMvxLog Log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor<MvxCachingFragmentStatePagerAdapter>();
+        private static void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            Log.Trace($"{caller} [{System.Threading.Thread.CurrentThread.ManagedThreadId}, {MvxAndroidMainThreadDispatcher.Instance.IsOnMainThread}] {msg}");
         }
     }
 }
