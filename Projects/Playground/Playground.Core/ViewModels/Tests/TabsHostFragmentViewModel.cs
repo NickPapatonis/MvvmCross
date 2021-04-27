@@ -19,6 +19,7 @@ namespace Playground.Core.ViewModels.Tests
 
         public Tab01ViewModel Tab01ViewModel { get; private set; }
         public Tab02ViewModel Tab02ViewModel { get; private set; }
+        public Tab03ViewModel Tab03ViewModel { get; private set; }
 
         public override Task Initialize()
         {
@@ -45,6 +46,8 @@ namespace Playground.Core.ViewModels.Tests
                 GetRevTextMessageReceiver.CreateSender(),
                 GetTextLengthMessageReceiver.CreateSender(),
                 SetExecutingCommandReceiver.CreateSender()));
+
+            Tab03ViewModel = Mvx.IoCProvider.IoCConstruct<Tab03ViewModel>();
 
             return base.Initialize();
         }

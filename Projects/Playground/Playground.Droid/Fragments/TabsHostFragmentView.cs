@@ -57,6 +57,7 @@ namespace Playground.Droid.Fragments
 
             ViewPagerFragments.Add(new MvxViewPagerFragmentInfo("Tab 1", "Tab01Tag", typeof(Tab01View), ViewModel.Tab01ViewModel));
             ViewPagerFragments.Add(new MvxViewPagerFragmentInfo("Tab 2", "Tab02Tag", typeof(Tab02View), ViewModel.Tab02ViewModel));
+            ViewPagerFragments.Add(new MvxViewPagerFragmentInfo("Tab 3", "Tab03Tag", typeof(Tab03View), ViewModel.Tab03ViewModel));
 
             /*
                 MvxFragmentPagerAdapter (obsolete)

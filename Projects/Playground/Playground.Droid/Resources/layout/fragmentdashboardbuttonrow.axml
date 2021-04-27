@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- The file name needs to be all lower case because of its useage by Mvx.MvxExpandableListView -->
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <TableLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:stretchColumns="0,1,2">
+
+    <TableRow>
+
+      <!-- Button 0 -->
+      <android.support.v7.widget.CardView
+				android:id="@+id/cardView0"
+				android:layout_width="@dimen/weighted_dimen"
+				android:layout_height="@dimen/dashboard_card_height"
+				android:gravity="center"
+				local:cardPreventCornerOverlap="false"
+				local:cardUseCompatPadding="true"
+				local:cardElevation="@dimen/card_elevation"
+				local:cardCornerRadius="@dimen/card_corner_radius"
+				local:MvxBind="Visible Button0.IsVisible; Click Button0.Navigate; Clickable Button0.IsClickable">
+        <RelativeLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/card_padding">
+          <ImageView
+						android:id="@+id/imageView0"
+						android:layout_width="@dimen/card_image_width"
+						android:layout_height="@dimen/card_image_height"
+						android:layout_alignParentTop="true"
+						android:layout_centerHorizontal="true"
+						local:MvxBind="Enabled Button0.IsClickable; DrawableName Button0.IconName"/>
+          <TextView
+						android:id="@+id/textView0"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_below="@+id/imageView0"
+						android:layout_centerHorizontal="true"
+						android:gravity="center_horizontal"
+						android:paddingTop="@dimen/padding_smaller"
+						style="@style/DashboardStyle.TitleText"
+						local:MvxBind="Text Button0.Text; Enabled Button0.IsClickable" />
+        </RelativeLayout>
+      </android.support.v7.widget.CardView>
+
+      <!-- Button 1 -->
+      <android.support.v7.widget.CardView
+				android:id="@+id/cardView1"
+				android:layout_width="@dimen/weighted_dimen"
+				android:layout_height="@dimen/dashboard_card_height"
+				android:gravity="center"
+				local:cardPreventCornerOverlap="false"
+				local:cardUseCompatPadding="true"
+				local:cardElevation="@dimen/card_elevation"
+				local:cardCornerRadius="@dimen/card_corner_radius"
+				local:MvxBind="Visible Button1.IsVisible; Click Button1.Navigate; Clickable Button1.IsClickable">
+        <RelativeLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/card_padding">
+          <ImageView
+						android:id="@+id/imageView1"
+						android:layout_width="@dimen/card_image_width"
+						android:layout_height="@dimen/card_image_height"
+						android:layout_centerHorizontal="true"
+						android:layout_alignParentTop="true"
+						local:MvxBind="Enabled Button1.IsClickable; DrawableName Button1.IconName" />
+          <TextView
+						android:id="@+id/textView1"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_below="@id/imageView1"
+						android:layout_centerHorizontal="true"
+						android:gravity="center_horizontal"
+						android:paddingTop="@dimen/padding_smaller"
+						style="@style/DashboardStyle.TitleText"
+						local:MvxBind="Text Button1.Text; Enabled Button1.IsClickable" />
+        </RelativeLayout>
+      </android.support.v7.widget.CardView>
+
+      <!-- Button 2 -->
+      <android.support.v7.widget.CardView
+				android:id="@+id/cardView2"
+				android:layout_width="@dimen/weighted_dimen"
+				android:layout_height="@dimen/dashboard_card_height"
+				android:gravity="center"
+				local:cardPreventCornerOverlap="false"
+				local:cardUseCompatPadding="true"
+				local:cardElevation="@dimen/card_elevation"
+				local:cardCornerRadius="@dimen/card_corner_radius"
+				local:MvxBind="Visible Button2.IsVisible; Click Button2.Navigate; Clickable Button2.IsClickable">
+        <RelativeLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/card_padding">
+          <ImageView
+						android:id="@+id/imageView2"
+						android:layout_width="@dimen/card_image_width"
+						android:layout_height="@dimen/card_image_height"
+						android:layout_centerHorizontal="true"
+						android:layout_alignParentTop="true"
+						local:MvxBind="Enabled Button2.IsClickable; DrawableName Button2.IconName" />
+          <TextView
+						android:id="@+id/textView2"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:paddingTop="@dimen/padding_tiny"
+						android:layout_below="@+id/imageView2"
+						android:layout_centerHorizontal="true"
+						android:gravity="center_horizontal"
+						style="@style/DashboardStyle.TitleText"
+						local:MvxBind="Text Button2.Text; Enabled Button2.IsClickable" />
+        </RelativeLayout>
+      </android.support.v7.widget.CardView>
+
+    </TableRow>
+
+  </TableLayout>
+</LinearLayout>

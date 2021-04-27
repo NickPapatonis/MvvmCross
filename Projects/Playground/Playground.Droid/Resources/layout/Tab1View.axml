@@ -5,28 +5,34 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          local:MvxBind="Text Message" />
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="40dp"
-        local:MvxBind="Text UserText" />
-    <Button
+  <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Show Child"
-        local:MvxBind="Click OpenChildCommand;" />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Show Tab 2"
-        local:MvxBind="Click OpenTab2Command;" />
-    <FrameLayout
+        local:MvxBind="Text Message" />
+  <EditText
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:textSize="40dp"
+      local:MvxBind="Text UserText" />
+  <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:text="Show Child"
+      local:MvxBind="Click OpenChildCommand; Enabled IsButtonEnabled" />
+  <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:text="Show Tab 2"
+      local:MvxBind="Click OpenTab2Command; Enabled IsButtonEnabled" />
+  <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:text="Toggle Button Enabled"
+      local:MvxBind="Click ToggleButtonEnabledCommand;" />
+  <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

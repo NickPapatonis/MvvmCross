@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MS-PL license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
@@ -19,6 +20,8 @@ namespace Playground.Core.ViewModels
         {
             Trace("Begin");
 
+            _IsButtonEnabledFunc = () => _IsButtonEnabled;
+
             OpenChildCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<ChildViewModel>());
 
             OpenModalCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<ModalViewModel>());
@@ -26,6 +29,8 @@ namespace Playground.Core.ViewModels
             OpenNavModalCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<ModalNavViewModel>());
 
             CloseCommand = new MvxAsyncCommand(async () => await NavigationService.Close(this));
+
+            ToggleButtonEnabledCommand = new MvxAsyncCommand(() => ToggleButtonEnabled());
 
             OpenTab2Command = new MvxAsyncCommand(async () => await NavigationService.ChangePresentation(new MvxPagePresentationHint(typeof(Tab2ViewModel))));
 
@@ -47,6 +52,29 @@ namespace Playground.Core.ViewModels
             Trace("End");
         }
 
+        private Task ToggleButtonEnabled()
+        {
+            //IsButtonEnabled = !IsButtonEnabled;
+            _IsButtonEnabled = !_IsButtonEnabled;
+            RaisePropertyChanged(() => IsButtonEnabled);
+            return Task.CompletedTask;
+        }
+
+        private bool _IsButtonEnabled = false;
+        private Func<bool> _IsButtonEnabledFunc;
+
+        public bool IsButtonEnabled => _IsButtonEnabledFunc();
+
+        //public bool IsButtonEnabled
+        //{
+        //    get => _IsButtonEnabled;
+        //    set
+        //    {
+        //        _IsButtonEnabled = value;
+        //        RaisePropertyChanged(() => IsButtonEnabled);
+        //    }
+        //}
+
         public IMvxAsyncCommand OpenChildCommand { get; private set; }
 
         public IMvxAsyncCommand OpenModalCommand { get; private set; }
@@ -56,6 +84,8 @@ namespace Playground.Core.ViewModels
         public IMvxAsyncCommand OpenTab2Command { get; private set; }
 
         public IMvxAsyncCommand CloseCommand { get; private set; }
+
+        public IMvxAsyncCommand ToggleButtonEnabledCommand { get; private set; }
 
         public override void ViewAppearing()
         {

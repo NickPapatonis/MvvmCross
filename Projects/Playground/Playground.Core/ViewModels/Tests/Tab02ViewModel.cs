@@ -180,7 +180,7 @@ namespace Playground.Core.ViewModels.Tests
 
         private void Error(Exception exception, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
         {
-            Log.Error($"{nameof(CloseViewModelCommand)} [{Thread.CurrentThread.ManagedThreadId}, {MvxMainThreadDispatcher.Instance.IsOnMainThread}] {exception.Message}\r\n, {exception.StackTrace}");
+            Log.Error($"{caller} [{Thread.CurrentThread.ManagedThreadId}, {MvxMainThreadDispatcher.Instance.IsOnMainThread}] {exception.Message}\r\n, {exception.StackTrace}");
         }
 
         public IMvxCommand CloseViewModelCommand { get; private set; }

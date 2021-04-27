@@ -23,14 +23,15 @@
   <dimen name="navigation_drawer_width">290dp</dimen>
 
   <!-- font definitions -->
-
+  <dimen name="text_tiniest">10sp</dimen>
   <dimen name="text_tinier">11sp</dimen>
   <dimen name="text_tiny">13sp</dimen>
   <dimen name="text_small">14sp</dimen>
   <dimen name="text_medium">15sp</dimen>
   <dimen name="text_large">16sp</dimen>
   <dimen name="text_huge">17sp</dimen>
-  <dimen name="text_very_huge">18sp</dimen>
+  <dimen name="text_giant">20sp</dimen>
+  <dimen name="text_XL">24sp</dimen>
 
   <dimen name="list_icon_size">50dp</dimen>
   <dimen name="detail_icon_size">100dp</dimen>
@@ -39,5 +40,43 @@
   <dimen name="error_dialog_verticalMargin">18dp</dimen>
   <dimen name="error_dialog_horizontalMargin">24dp</dimen>
   <dimen name="error_dialog_font_size">16sp</dimen>
+
+  <!--Common Dimensions-->
+  <dimen name="common_very_tiny_item_dimen">8dp</dimen>
+  <dimen name="common_tiny_item_dimen">10dp</dimen>
+  <dimen name="common_small_item_dimen">20dp</dimen>
+  <dimen name="common_half_medium_item_dimen">30dp</dimen>
+  <dimen name="common_smedium_item_dimen">40dp</dimen>
+  <dimen name="common_medium_item_dimen">60dp</dimen>
+  <dimen name="common_large_item_height">250dp</dimen>
+  <dimen name="common_margin_dimen">16dp</dimen>
+  <dimen name="weighted_dimen">0dp</dimen>
+
+  <!-- Padding dimensions -->
+  <dimen name="padding_none">0dp</dimen>
+  <dimen name="padding_tiny">3dp</dimen>
+  <dimen name="padding_smaller">4dp</dimen>
+  <dimen name="padding_small">5dp</dimen>
+  <dimen name="padding_medium">7dp</dimen>
+  <dimen name="padding_large">8dp</dimen>
+  <dimen name="padding_larger">10dp</dimen>
+  <dimen name="padding_huge">15dp</dimen>
+  <dimen name="padding_giant">16dp</dimen>
+
+  <!-- Standard Card Dimensions -->
+  <dimen name="card_corner_radius">8dp</dimen>
+  <dimen name="card_elevation">3dp</dimen>
+  <dimen name="card_border">1dp</dimen>
+
+  <!-- Dashboard Portrait- Dimens -->
+  <dimen name="card_image_width">46dp</dimen>
+  <dimen name="card_image_height">46dp</dimen>
+  <dimen name="card_padding">12dp</dimen>
+  <dimen name="header_image_width">48dp</dimen>
+  <dimen name="header_image_height">48dp</dimen>
+
+  <!-- Dashboard Landscape-Dimensions -->
+  <dimen name="dashboard_card_height">120dp</dimen>
+  <dimen name="dashboard_card_height_landscape">192dp</dimen>
 
 </resources>

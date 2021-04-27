@@ -67,6 +67,7 @@
     <Compile Include="Fragments\Modal02View.cs" />
     <Compile Include="Fragments\Tab01View.cs" />
     <Compile Include="Fragments\Tab02View.cs" />
+    <Compile Include="Fragments\Tab03View.cs" />
     <Compile Include="Fragments\TabsHostFragmentView.cs" />
     <Compile Include="Fragments\TabsRootBView.cs" />
     <Compile Include="G1T\DialogFragment.cs" />
@@ -299,6 +300,21 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\TabsHostFragmentView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\HomeTabFragment.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\fragmentdashboardsectionheader.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\fragmentdashboardbuttonrow.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
