@@ -7,7 +7,7 @@ using Playground.Core.G1T;
 
 namespace Playground.Core.ViewModels.Tests
 {
-    public class Tab03ViewModel : TksTabBaseViewModel
+    public class Tab03ViewModel : ViewSafeMvxViewModel
     {
         public Tab03ViewModel(IMvxLogProvider logProvider, IMvxNavigationService navigationService)
             : base(logProvider, navigationService)

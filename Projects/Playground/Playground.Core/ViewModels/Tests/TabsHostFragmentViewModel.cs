@@ -25,6 +25,8 @@ namespace Playground.Core.ViewModels.Tests
         {
             SetCurrentTabItemReceiver = new SetValueMessageReceiver<int>((msg) => CurrentItem = msg.Value);
             SetExecutingCommandReceiver = new SetValueMessageReceiver<bool>((msg) => _executingCommand = msg.Value);
+            // Not the correct usage of SetValueMessageReceiver.  Should have a dedicated message for tabs refresh.
+            RefreshTabsMessageReceiver = new SetValueMessageReceiver<bool>((msg) => RefreshTabs(msg.Value));
 
             SetCountReceiver = new SetValueMessageReceiver<int>();
             GetTextMessageReceiver = new GetTextMessageReceiver();
@@ -37,7 +39,8 @@ namespace Playground.Core.ViewModels.Tests
                 SetCountReceiver,
                 GetTextMessageReceiver,
                 GetRevTextMessageReceiver,
-                GetTextLengthMessageReceiver));
+                GetTextLengthMessageReceiver,
+                RefreshTabsMessageReceiver.CreateSender()));
 
             Tab02ViewModel = Mvx.IoCProvider.IoCConstruct<Tab02ViewModel>();
             Tab02ViewModel.Prepare(new Tab02ViewModelConfig(
@@ -58,6 +61,7 @@ namespace Playground.Core.ViewModels.Tests
         private GetTextMessageReceiver GetTextMessageReceiver { get; set; }
         private GetValueMessageReceiver<string> GetRevTextMessageReceiver { get; set; }
         private GetValueMessageReceiver<int> GetTextLengthMessageReceiver { get; set; }
+        private SetValueMessageReceiver<bool> RefreshTabsMessageReceiver { get; set; }
 
         private bool _executingCommand;
 
@@ -150,6 +154,16 @@ namespace Playground.Core.ViewModels.Tests
             GetTextLengthMessageReceiver.Dispose();
             base.ViewDestroy(viewFinishing);
 
+            Trace("End");
+        }
+
+        private MvxInteraction<UpdateTabsRequest> _updateTabsInteraction = new MvxInteraction<UpdateTabsRequest>();
+        public IMvxInteraction<UpdateTabsRequest> UpdateTabsInteraction => _updateTabsInteraction;
+
+        private void RefreshTabs(bool RefreshAll)
+        {
+            Trace("Begin");
+            _updateTabsInteraction.Raise(new UpdateTabsRequest(false));
             Trace("End");
         }
     }

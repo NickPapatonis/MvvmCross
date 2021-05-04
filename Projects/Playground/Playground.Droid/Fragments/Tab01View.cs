@@ -21,7 +21,7 @@ namespace Playground.Droid.Fragments
         {
             base.OnCreateView(inflater, container, savedInstanceState);
 
-            var view = this.BindingInflate(Resource.Layout.Tab1View, null);
+            var view = this.BindingInflate(Resource.Layout.Tab01View, null);
 
             return view;
         }

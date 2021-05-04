@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
@@ -7,9 +8,16 @@ using Android.Support.Design.Widget;
 using Android.Support.V4.App;
 using Android.Support.V4.View;
 using Android.Views;
+using MvvmCross;
+using MvvmCross.Base;
+using MvvmCross.Binding.BindingContext;
 using MvvmCross.Droid.Support.V4;
+using MvvmCross.Logging;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
+using MvvmCross.Platforms.Android.Views;
+using MvvmCross.ViewModels;
+using Playground.Core.G1T;
 using Playground.Core.ViewModels.Tests;
 using Playground.Droid.Activities;
 using static Android.Support.Design.Widget.TabLayout;
@@ -44,11 +52,25 @@ namespace Playground.Droid.Fragments
             TabLayout = view.FindViewById<TabLayout>(Resource.Id.test_tabs);
             InitializeTabLayout();
 
-            //var set = this.CreateBindingSet<TabbedSelectorFragment<TViewModel>, TViewModel>();
-            //set.Bind(this).For(vw => vw.UpdateTabsInteraction).To(vm => vm.UpdateTabsInteraction).OneWay();
-            //set.Apply();
+            var set = this.CreateBindingSet<TabsHostFragmentView, TabsHostFragmentViewModel>();
+            set.Bind(this).For(vw => vw.UpdateTabsInteraction).To(vm => vm.UpdateTabsInteraction).OneWay();
+            set.Apply();
 
             return view;
+        }
+
+        private IMvxInteraction<UpdateTabsRequest> _updateTabsInteraction;
+        public IMvxInteraction<UpdateTabsRequest> UpdateTabsInteraction
+        {
+            get => _updateTabsInteraction;
+            set
+            {
+                if (_updateTabsInteraction != null)
+                    _updateTabsInteraction.Requested -= OnUpdateTabsRequested;
+
+                _updateTabsInteraction = value;
+                _updateTabsInteraction.Requested += OnUpdateTabsRequested;
+            }
         }
 
         private void InitializeViewPager()
@@ -57,7 +79,7 @@ namespace Playground.Droid.Fragments
 
             ViewPagerFragments.Add(new MvxViewPagerFragmentInfo("Tab 1", "Tab01Tag", typeof(Tab01View), ViewModel.Tab01ViewModel));
             ViewPagerFragments.Add(new MvxViewPagerFragmentInfo("Tab 2", "Tab02Tag", typeof(Tab02View), ViewModel.Tab02ViewModel));
-            ViewPagerFragments.Add(new MvxViewPagerFragmentInfo("Tab 3", "Tab03Tag", typeof(Tab03View), ViewModel.Tab03ViewModel));
+            //ViewPagerFragments.Add(new MvxViewPagerFragmentInfo("Tab 3", "Tab03Tag", typeof(Tab03View), ViewModel.Tab03ViewModel));
 
             /*
                 MvxFragmentPagerAdapter (obsolete)
@@ -95,6 +117,47 @@ namespace Playground.Droid.Fragments
             //TabLayout.TabSelected += TabLayout_TabSelected;
             //TabLayout.TabUnselected += TabLayout_TabUnselected;
             //SetTabLayoutAppearance();
+        }
+
+        private void OnUpdateTabsRequested(object sender, MvxValueEventArgs<UpdateTabsRequest> eventArgs)
+        {
+            Trace("Begin");
+
+            Activity.RunOnUiThread(() =>
+            {
+                if (eventArgs.Value.ReloadExistingTabs)
+                {
+                    Trace("Reload all tabs using InitializeViewPager");
+                    InitializeViewPager();
+                }
+                else
+                {
+                    Trace("Load Tab 3 only");
+                    ViewPagerAdapter.FragmentsInfo.Insert(2, new MvxViewPagerFragmentInfo("Tab 3", "Tab03Tag", typeof(Tab03View), ViewModel.Tab03ViewModel));
+
+                    Trace("Calling ViewPagerAdapter.NotifyDataSetChanged");
+                    ViewPagerAdapter.NotifyDataSetChanged();
+                }
+
+                //SetTabLayoutAppearance();
+            });
+
+            Trace("End");
+        }
+
+        public override void OnDestroyView()
+        {
+            base.OnDestroyView();
+            if (_updateTabsInteraction != null)
+            {
+                _updateTabsInteraction.Requested -= OnUpdateTabsRequested;
+            }
+        }
+
+        private IMvxLog Log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor<TabsHostFragmentView>();
+        private void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
+        {
+            Log.Trace($"{caller} [{Thread.CurrentThread.ManagedThreadId},{MvxAndroidMainThreadDispatcher.Instance.IsOnMainThread}] {msg}");
         }
     }
 

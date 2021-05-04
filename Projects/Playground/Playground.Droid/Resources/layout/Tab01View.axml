@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_frame"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        local:MvxBind="Text Message" />
+  <EditText
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:textSize="40dp"
+      local:MvxBind="Text UserText" />
+  <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:text="Show Tab 2"
+      local:MvxBind="Click OpenTab2Command" />
+  <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:text="Refresh Tabs"
+      local:MvxBind="Click RefreshTabsCommand" />
+</LinearLayout>

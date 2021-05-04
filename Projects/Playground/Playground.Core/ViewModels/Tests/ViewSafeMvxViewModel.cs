@@ -1,6 +1,5 @@
 ﻿#define useMvxNavVm
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Logging;
@@ -10,37 +9,44 @@ using Playground.Core.G1T;
 
 namespace Playground.Core.ViewModels.Tests
 {
-    public interface ITksTabBaseViewModel
+    public interface IViewSafeMvxViewModel
     {
         Task<bool> WaitForViewToAppearAsync();
         bool IsViewAppeared { get; }
     }
 
 #if useMvxNavVm
-    public abstract class TksTabBaseViewModel : MvxNavigationViewModel, ITksTabBaseViewModel
+    public abstract class ViewSafeMvxViewModel : MvxNavigationViewModel, IViewSafeMvxViewModel
 #else
-    public abstract class TksViewModel : MvxViewModel, ITksViewModel
+    public abstract class ViewSafeMvxViewModel : MvxViewModel, ITksViewModel
 #endif
     {
         #region [ Construction ]
 #if useMvxNavVm
-        public TksTabBaseViewModel(IMvxLogProvider logProvider, IMvxNavigationService navigationService)
+        public ViewSafeMvxViewModel(IMvxLogProvider logProvider, IMvxNavigationService navigationService)
             : base(logProvider, navigationService)
         {
-#else
-        public TksViewModel(IStatefulLogger logger, IMvxNavigationService navigationService)
-        {
-            Log = logger.WithTagForInstance(this);
-            NavigationService = navigationService;
-#endif
         }
+#else
+        public ViewSafeMvxViewModel(IStatefulLogger logger)
+        {
+          Log = logger.WithTagForInstance(this);
+        }
+
+        public ViewSafeMvxViewModel(IStatefulLogger logger, IMvxNavigationService navigationService)
+          : this(logger)
+        {
+          NavigationService = navigationService;
+        }
+#endif
 
         #endregion
 
         #region [ Private Properties ]
 
         private TaskCompletionSource<bool> _viewAppearedTaskCompletionSource { get; set; } = CreateViewAppearedTaskCompletionSource();
-        // TODO: PUT CODE IN TO DISPOSE _viewDestroyedCancellationTokenSource
+        // TODO: Need to dispose _viewDestroyedCancellationTokenSource. Probably not safe to dispose with ordinary Dispose pattern
+        // or in the ViewDestroy method. May have to setup timer and destroy after one or two second delay.
         private CancellationTokenSource _viewDestroyedCancellationTokenSource { get; set; } = new CancellationTokenSource();
 
         #endregion
@@ -74,14 +80,12 @@ namespace Playground.Core.ViewModels.Tests
 
         #endregion
 
-        #region [ ITksViewModel ]
+        #region [ IViewSafeMvxViewModel ]
 
         public bool IsViewAppeared => _viewAppearedTaskCompletionSource.Task.IsCompleted;
 
         public async Task<bool> WaitForViewToAppearAsync()
         {
-            // TODO: DETERMINE IF TaskCreationOptions.RunContinuationsAsynchronously SHOULD BE USED IN CancellationTokenTaskSource
-            // TODO: CHANGE WaitAsync TO SIMPLIFIED VERSION AND CancellationTokenTaskSource IS NO LONGER NEEDED
             bool appeared = false;
             try
             {
@@ -124,7 +128,7 @@ namespace Playground.Core.ViewModels.Tests
             {
                 // throwOnFirstException = false ensures the callback registered by CancellationTokenTaskSource will be executed 
                 // since our await on _viewAppearedTaskCompletionSource might need to be cancelled
-                _viewDestroyedCancellationTokenSource.Cancel(throwOnFirstException: false);  
+                _viewDestroyedCancellationTokenSource.Cancel(throwOnFirstException: false);
             }
             base.ViewDestroy(viewFinishing);
         }
@@ -141,7 +145,7 @@ namespace Playground.Core.ViewModels.Tests
         #endregion
     }
 
-    public class TksTabBaseViewModelConfig
+    public class ViewSafeMvxViewModelConfig
     {
 
     }

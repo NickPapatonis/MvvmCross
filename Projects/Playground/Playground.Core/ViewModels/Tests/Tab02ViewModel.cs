@@ -9,7 +9,7 @@ using MvvmCross.ViewModels;
 
 namespace Playground.Core.ViewModels.Tests
 {
-    public class Tab02ViewModel : TksTabBaseViewModel, IMvxViewModel<Tab02ViewModelConfig>
+    public class Tab02ViewModel : ViewSafeMvxViewModel, IMvxViewModel<Tab02ViewModelConfig>
     {
         public Tab02ViewModel(IMvxLogProvider logProvider, IMvxNavigationService navigationService)
             : base(logProvider, navigationService)

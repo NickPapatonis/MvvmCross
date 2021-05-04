@@ -26,17 +26,19 @@ namespace Playground.Core.ViewModels.Tests
             ViewModelConfig.GetRevTextMessageReceiver.SetAsyncHandler(GetUserRevTextHandler);
             ViewModelConfig.GetTextLengthMessageReceiver.SetHandler(GetUserTextLengthHandler);
 
-            OpenChildCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<ChildViewModel>());
-
-            OpenModalCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<ModalViewModel>());
-
-            OpenNavModalCommand = new MvxAsyncCommand(async () => await NavigationService.Navigate<ModalNavViewModel>());
-
-            CloseCommand = new MvxAsyncCommand(async () => await NavigationService.Close(this));
-
             //OpenTab2Command = new MvxAsyncCommand(async () => await NavigationService.ChangePresentation(new MvxPagePresentationHint(typeof(Tab02ViewModel))));
 
-            OpenTab2Command = new MvxAsyncCommand(() => { ViewModelConfig.SetCurrentTabItemSender.Send(1); return Task.CompletedTask; });
+            OpenTab2Command = new MvxAsyncCommand(() => 
+            {
+                ViewModelConfig.SetCurrentTabItemSender.Send(1);
+                return Task.CompletedTask;
+            });
+
+            RefreshTabsCommand = new MvxAsyncCommand(() =>
+            {
+                ViewModelConfig.RefreshTabsMessageSender.Send(true);
+                return Task.CompletedTask;
+            });
         }
 
         public override async Task Initialize()
@@ -46,15 +48,9 @@ namespace Playground.Core.ViewModels.Tests
 
         private Tab01ViewModelConfig ViewModelConfig { get; set; }
 
-        public IMvxAsyncCommand OpenChildCommand { get; private set; }
-
-        public IMvxAsyncCommand OpenModalCommand { get; private set; }
-
-        public IMvxAsyncCommand OpenNavModalCommand { get; private set; }
-
         public IMvxAsyncCommand OpenTab2Command { get; private set; }
 
-        public IMvxAsyncCommand CloseCommand { get; private set; }
+        public IMvxAsyncCommand RefreshTabsCommand { get; private set; }
 
         private void Trace(string msg, [System.Runtime.CompilerServices.CallerMemberName]string caller = null)
         {
@@ -186,13 +182,15 @@ namespace Playground.Core.ViewModels.Tests
             SetValueMessageReceiver<int> setCountReceiver,
             GetTextMessageReceiver getTextMessageReceiver,
             GetValueMessageReceiver<string> getRevTextMessageReceiver,
-            GetValueMessageReceiver<int> getTextLengthMessageReceiver)
+            GetValueMessageReceiver<int> getTextLengthMessageReceiver,
+            SetValueMessageSender<bool> refreshTabsMessageSender)
         {
             SetCurrentTabItemSender = setCurrentTabItemSender;
             SetCountReceiver = setCountReceiver;
             GetTextMessageReceiver = getTextMessageReceiver;
             GetRevTextMessageReceiver = getRevTextMessageReceiver;
             GetTextLengthMessageReceiver = getTextLengthMessageReceiver;
+            RefreshTabsMessageSender = refreshTabsMessageSender;
         }
 
         public SetValueMessageSender<int> SetCurrentTabItemSender { get; private set; }
@@ -200,6 +198,7 @@ namespace Playground.Core.ViewModels.Tests
         public GetTextMessageReceiver GetTextMessageReceiver { get; private set; }
         public GetValueMessageReceiver<string> GetRevTextMessageReceiver { get; private set; }
         public GetValueMessageReceiver<int> GetTextLengthMessageReceiver { get; private set; }
+        public SetValueMessageSender<bool> RefreshTabsMessageSender { get; private set; }
 
         #region [ IDisposable ]
 
